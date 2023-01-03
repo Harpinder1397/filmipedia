@@ -1,0 +1,119 @@
+@import '/src/assets/styles/variables.less';
+
+.registarion-container {
+    // width: 800px;
+    // border-radius: 20px;
+    // margin: 80px auto;
+    height: 100vh;
+    background: var(--login-modal-background)!important;
+    display: flex;
+    .guidance-container {
+        width: 50%;
+        background: rgba(0,0,0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        // border-radius: 20px;
+        .content {
+            color: white;
+        }
+        .heading-h1 {
+            text-align: left !important;
+        }
+        .about-application {
+            padding-left: 19px;
+            li {
+                color: #fff;
+                font-size: 20px;
+                line-height: 30px;
+            }
+        }
+    }
+    .left-side-container {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .label-container {
+            margin-bottom: 5px;
+            .required {
+                color: red;
+                margin-right: 5px;
+            }
+        }
+        .ant-input-number {
+            width: 100%;
+            border-radius: 4px;
+            border-color: var(--border-color);
+            background: var(--input-field-color) !important;
+            .ant-input-number-handler-wrap {
+                display: none;
+            }
+        }
+        .ant-input, .ant-input-number-input {
+            height: 36px!important;
+            border-radius: 4px;
+        }
+        .ant-input-number-input {
+            height: 34px!important;
+            border-radius: 4px;
+        }
+        .ant-input-password {
+            height: 36px !important;
+            background: var(--input-field-color) !important;
+            .ant-input {
+                height: unset !important;
+            }
+        }
+        .register-button {
+            margin-top: 30px;
+            // color: rgb(248, 249, 250);
+        }
+        .homepage-link, .signIn-link {
+            margin-top: 30px;
+            color: rgb(248, 249, 250);
+        }
+        .homepage-link:hover, .signIn-link:hover {
+            border-bottom: 1px solid rgb(248, 249, 250);
+        }
+    }
+    .form-container {
+        width: 500px;
+        padding: 24px;
+        box-shadow: #00000059 0 5px 15px;
+        border-radius: 4px;
+        .ant-input-group {
+            display: flex;
+            .ant-select-selector {
+                height: 36px;
+                width: 90px;
+                border-radius: 4px 0 0 4px !important;
+            }
+            .ant-select-selection-item {
+                line-height: 36px !important;
+            }
+        }
+        .ant-input-number {
+            border-radius: 0 4px 4px 0 !important;
+        }
+    }
+}
+
+@media screen and (max-width: 456px) {
+    .registarion-container {
+        width: 100%;
+        justify-content: center;
+        padding: 0 20px;
+        .guidance-container {
+           display: none;
+        }
+        .form-container {
+            width: 100%;
+            padding: 24px;
+        }
+    }
+    .left-side-container {
+        width: 100% !important;
+    }
+}

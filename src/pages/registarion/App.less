@@ -1,0 +1,130 @@
+@import '~antd/dist/antd.less';
+@import './assets/styles/variables.less';
+
+body {
+  font-size: 16px;
+  line-height: 19px;
+  background-image: url("./assets/images/texture.png");
+  background-blend-mode: hard-light;
+  background-attachment: fixed;
+  background-color: rgba(0, 0, 0, 0.6);
+  background-size: cover;
+}
+#root {
+  .ant-layout {
+    background: none;
+    min-height: 100vh !important;
+  }
+  .ant-layout-header {
+    padding-left: @paddingX;
+    padding-right: @paddingX;
+  }
+  .ant-layout-footer {
+    padding: 0;
+  }
+  .layout-content {
+    margin: 65px auto;
+  }
+  .ant-btn-primary {
+    color: @text-color !important;
+    border-radius: 4px;
+    background: @theme-color !important;
+    border: none;
+  }
+  .ant-checkbox-inner {
+    border-radius: 4px;
+
+  }
+  .ant-checkbox-checked {
+    .ant-checkbox-inner {
+      background-color: @text-color;
+    }
+  }
+  .ant-alert-error {
+    border-radius: 12px;
+  }
+  .ant-checkbox-wrapper {
+    margin-left: 0px !important;
+  }
+  .selected-btn {
+    background-color: @selected-color !important;
+  }
+  h3.ant-typography, .ant-typography h3 {
+    margin: 10px !important; 
+    font-weight: 400 !important;
+    font-size: 18px !important;
+    text-align: center !important;
+  }
+  .ant-table-thead {
+    .ant-table-cell {
+      background-color: @theme-color;
+    }
+  }
+  .ant-select-selector {
+    background-color: @theme-color;
+  }
+  .ant-pagination-item {
+    background: @theme-color !important;
+    border: none;
+    color: @text-color;
+  }
+  .ant-pagination-item-active {
+    background: @selected-color !important;
+    color: @text-color !important;
+  }  
+  .ant-input, .ant-input-password {
+    border-radius: 4px;
+    background: var(--input-field-color) !important;
+    border-color: Var(--border-color) !important;
+    
+    // padding: 6px;
+  }
+  .ant-form-item-required {
+    color: @theme-color;
+    font-size: 16px;
+    line-height: 26px;
+  }
+  h1 {
+    font-size: 38px;
+    line-height: 46px;
+    text-align: center;
+    color: @theme-color;
+  }
+  h3 {
+    font-size: 20px;
+    line-height: 32px;
+    text-align: center;
+    color: @theme-color;
+  }
+  .d-flex {
+    display: flex !important;
+  }
+  .justify-content-between {
+    justify-content: space-between;
+  }
+  .align-content-center {
+    align-items: center;
+  }
+  .column-reverse {
+    flex-direction: column-reverse;
+  }
+  .flex-row {
+    flex-direction: row;
+  }
+  .w-100 {
+    width: 100%;
+  }
+  .mr-20 {
+    margin-right: 20px;
+  }
+  .view-detail {
+    font-size: 14px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+    color: deepskyblue;
+    cursor: pointer;
+    text-align: justify;
+  }
+
+}

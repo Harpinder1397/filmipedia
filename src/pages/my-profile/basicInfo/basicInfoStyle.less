@@ -1,0 +1,36 @@
+.basic-info-ant-row {
+    padding: '24px';
+    width: 100%;
+}
+.submit-button-container {
+    margin-top: 20px;
+    text-align: center;
+    .submit-save-btn {
+        letter-spacing: 1px;
+        font-weight: 600;
+        text-transform: uppercase;
+        width: 100px;
+        span {
+            color: var(--button-font-color) !important;
+        }
+    }
+}
+
+.checkbox-mode-available {
+    display: flex;
+    justify-content: start;
+    span {
+        margin-right: 10px;
+    }
+}
+
+@media screen and (max-width: 456px) {
+    .basic-info-ant-row {
+        padding: 0;
+        row-gap: 0 !important;
+        
+        .submit-save-btn {
+            margin: 20px auto 0;
+        }
+    }
+}

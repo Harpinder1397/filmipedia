@@ -1,0 +1,5 @@
+.rc-virtual-list-holder .sizeOptions {
+    max-height: none;
+    overflow-y: hidden;
+    overflow-anchor: none
+  }

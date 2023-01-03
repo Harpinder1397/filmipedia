@@ -1,0 +1,59 @@
+@import '/src/assets/styles/variables.less';
+
+.message-container {
+    width: 1350px;
+    margin: 65px auto;
+
+    .sideBar-container {
+        border-radius: 12px;
+        background-color: rgba(217, 233, 191, 1);
+        // background-color: @message-background;
+        height: 80vh;
+        overflow: scroll;
+    }
+    .thread-container {
+        margin-top: 5px;
+        background-color: @thread-background;
+        padding: 10px 24px;
+        cursor: pointer;
+    }
+    .thread-meta {
+        color: @content-background
+    }
+    .thread-message {
+        text-align: justify;
+        color: @theme-color;
+        margin-top: 15px
+    }
+    .messagesMain-container {
+        height: 70vh;
+        // background-color: rgba(217, 233, 191, 1);
+        // background-color: @message-background;
+        border-radius: 12px;
+        margin-left: 10px;
+        display: flex;
+        flex-direction: column-reverse;
+        // margin-bottom: 0px;
+    }
+    .single-message-container {
+        margin: 1%;
+        background-color: @thread-background;
+        padding: 10px 24px;
+        width: 60%;
+        border-radius: 12px;
+        // cursor: pointer;
+    }
+    .ml-40 {
+        margin-left: 39%;
+
+    }
+    .text-area {
+        position: absolute;
+        bottom: 0px;
+        width: 100%;
+    }
+    .thread-date {
+        font-size: 12px;
+    }
+    
+}
