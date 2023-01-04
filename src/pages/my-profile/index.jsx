@@ -5,6 +5,7 @@ import {
   updateUserApi,
   updateThumbnailsApi,
   createUserApi,
+  currentDpThumbnailApi,
 } from "../../api/user";
 import React, { useEffect, useState, useContext } from "react";
 import { mapStates, mapCities } from "../../common/utils";
@@ -51,6 +52,7 @@ const MyProfile = () => {
   const userId = Id || myUserId;
   const createUserCheck = window.location.pathname == "/user/create/profile";
 
+console.log(userDetails, 'userDetails')
 
   const getUserDetails = async () => {
     setIsloading(true);
@@ -219,26 +221,22 @@ const MyProfile = () => {
     fd.append("imgUploader", files);
     const loginResponse = await uploadApi(userId, fd);
     if (!userDetails.thumbnails.length) {
-      const thumbnails = [
-        ...userDetails.thumbnails,
-        { url: loginResponse, dp: true, createdAt: new Date() },
-      ];
+      const thumbnails = { url: loginResponse, dp: true, createdAt: new Date() }
       updateThumbnailsApi(userId, thumbnails).then(() => {
         setIsloading(false);
+        getUserDetails()
       });
-      setUserDetails({ ...userDetails, thumbnails });
+      // setUserDetails({ ...userDetails, thumbnails });
       setFiles({});
       return;
     }
-    const thumbnails = [
-      ...userDetails.thumbnails,
-      { url: loginResponse, dp: false, createdAt: new Date() },
-    ];
+    const thumbnails = { url: loginResponse, dp: false, createdAt: new Date() }
     updateThumbnailsApi(userId, thumbnails).then(() => {
       setIsloading(false);
+      getUserDetails()
     });
     setFiles({});
-    setUserDetails({ ...userDetails, thumbnails });
+    // setUserDetails({ ...userDetails, thumbnails });
   };
 
   const makeDp = (index) => {
@@ -246,10 +244,11 @@ const MyProfile = () => {
     const newArray = userDetails?.thumbnails?.map((img, idx) =>
       idx === index ? { ...img, dp: true } : { ...img, dp: false }
     );
-    updateThumbnailsApi(userId, newArray).then(() => {
+    currentDpThumbnailApi(userId, newArray).then(() => {
       setIsloading(false);
+      getUserDetails()
     });
-    setUserDetails({ ...userDetails, thumbnails: newArray });
+    // setUserDetails({ ...userDetails, thumbnails: newArray });
   };
 
   const removePic = async (index, url) => {
@@ -268,13 +267,13 @@ const MyProfile = () => {
           idx === 0 ? { ...img, dp: true } : { ...img, dp: false }
         );
         setUserDetails({ ...userDetails, thumbnails: dataToSend });
-        return updateThumbnailsApi(userId, dataToSend).then(() => {
+        return currentDpThumbnailApi(userId, dataToSend).then(() => {
           setIsloading(false);
           getUserDetails();
         });
       }
       setUserDetails({ ...userDetails, thumbnails: filteredArray });
-      updateThumbnailsApi(userId, filteredArray).then(() => {
+      currentDpThumbnailApi(userId, filteredArray).then(() => {
         setIsloading(false);
         getUserDetails();
       });

@@ -1,5 +1,4 @@
 import { Row, Col, Button, message, Spin } from 'antd';
-import { FiltersContext } from '../../../App';
 import FormInput from '../../../common/inputs/FormInput';
 import FormSelect from '../../../common/inputs/FormSelect';
 import { useContext, useState, useEffect } from 'react';
@@ -11,12 +10,13 @@ import ProjectModal from './ProjectModal';
 import './projectDetailsStyle.less'
 import { getCategoryApi } from '../../../api/getCategories';
 import { useParams } from 'react-router-dom';
+import { deleteProjectByIdApi, getUserApi, updateProjectByIdApi, updateProjectsApi } from '../../../api/user';
 
 const Projects = () => {
 
   const [categories, setCategories] = useState({});
   const [createProject, setCreateProject] = useState({});
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [isVisibleModal, setIsVisibleModal] = useState(false);
 	const [modalTitle, setModalTitle] = useState('Add');
@@ -26,7 +26,7 @@ const Projects = () => {
   const userId = Id || myUserId;
   // GET PROJECTS LIST API
   const fetchProjects = async () => {
-		const res = await getProjectsApi(userId);
+		const res = await getUserApi(userId);
     if(res){
       setProjects(res);
       setTimeout(() => {
@@ -46,8 +46,8 @@ const Projects = () => {
     if(modalTitle === 'Add'){
        // PROJECT ADD API
        setIsLoading(true);
-      const payload = {...createProject, userId: userId }
-      const res = await createProjectApi(payload);
+      const payload = {...createProject, _id: new Date().valueOf() }
+      const res = await updateProjectsApi(userId, payload);
       if(res){
          setIsVisibleModal(false);
          setCreateProject({});
@@ -62,7 +62,7 @@ const Projects = () => {
     if(modalTitle === 'Edit'){
       // PROJECT UPDATE API
       setIsLoading(true);
-      const res = await updateProjectApi(createProject._id, createProject);
+      const res = await updateProjectByIdApi(userId, createProject?._id, createProject);
       if(res){
          setIsVisibleModal(false);
          setCreateProject({});
@@ -80,7 +80,8 @@ const Projects = () => {
   // ADD PROJECT DELETE
   const handleDeleteProjectFun = async (id) => {
     setIsLoading(true);
-    const res = await deleteProjectApi(id);
+    const project = projects?.projects?.filter((item) => item._id != id);
+    const res = await deleteProjectByIdApi(projects?._id, project);
     if(res){
       fetchProjects();
       setTimeout(() => {
@@ -134,7 +135,7 @@ const Projects = () => {
     <Spin spinning={isLoading}>
       <Row gutter={[24, 24]} className='project-update-container' >
         {
-          projects.length ?  projects.map((project) => (
+          projects?.projects?.length ?  projects?.projects?.map((project) => (
             <>
               <Col xs={24} sm={12} md={8} lg={5} xxl={5} xl={5}>
                 <FormInput
@@ -192,6 +193,7 @@ const Projects = () => {
         isVisibleModal={isVisibleModal}
         modalTitle={modalTitle}
         createProject={createProject}
+        setCreateProject={setCreateProject}
         handleAddProjectFun={handleAddProjectFun}
         handleCancel={handleCancel}
         onChangeProjectFun={onChangeProjectFun}

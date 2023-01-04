@@ -4,7 +4,7 @@ import FormInput from '../../../common/inputs/FormInput';
 import FormSelect from '../../../common/inputs/FormSelect';
 
 const ProjectModal = (props) => {
-  const {categories, subCategoriesList, setSubCategoriesList, isVisibleModal, modalTitle, createProject, handleAddProjectFun, handleCancel, onChangeProjectFun } = props;
+  const {categories, subCategoriesList, setSubCategoriesList, isVisibleModal, modalTitle, createProject, setCreateProject, handleAddProjectFun, handleCancel, onChangeProjectFun } = props;
   return (
     <Modal
       visible={isVisibleModal}
@@ -39,6 +39,7 @@ const ProjectModal = (props) => {
               const getSubCategories = categories.filter((item) => item._id === val.id)
               setSubCategoriesList(getSubCategories[0].childern);
               onChangeProjectFun(val, 'category')
+              setCreateProject({...createProject, category: val.value, subCategory: null});
             }}
             // onClear={() => setFormData({...formData, subCategory: null})}
             options={categories}

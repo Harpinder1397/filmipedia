@@ -98,8 +98,38 @@ export const updateProjectsApi = (userId, payload) => {
     });
 };
 
+export const updateProjectByIdApi = (userId, id, payload) => {
+  return apiPost(`${API_URL}/user/${userId}/project/update/${id}`, payload)
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
+export const deleteProjectByIdApi = (userId, payload) => {
+  return apiPost(`${API_URL}/user/${userId}/project/delete`, payload)
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
 export const updateThumbnailsApi = (userId, payload) => {
   return apiPost(`${API_URL}/user/${userId}/thumbnails`, payload)
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
+export const currentDpThumbnailApi = (userId, payload) => {
+  return apiPost(`${API_URL}/user/${userId}/thumbnail`, payload)
     .then((res) => {
       return res;
     })
