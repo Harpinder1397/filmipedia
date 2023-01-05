@@ -35,13 +35,13 @@ const CommonDataBaseList = ({isFav, loading }) => {
   const location = useLocation(); // React Hook
   const history = useHistory();
   const paramQuery = qs.parse(location?.search)
-  const { filters, formData, categories, extraTalent, bestIn, setFormData, fetchCategories, categoryId, setSubCategories } = useContext(FiltersContext);
+  const { filters, formData, categories, extraTalent, bestIn, setFormData, fetchCategories, categoryId, setSubCategories, selectedSubCategories } = useContext(FiltersContext);
   const formData1 = qs.parse(location?.search)
   const { data: allUsers } = useUserQuery();
   const { mutate: userNameMutation, isLoading } = useUpdateUserNameMutation();
   const {data: countriesList } = useGetCountriesQuery();
   const {mutate: getCountriesMutation } = useGetCountriesMutation();
-
+  const categoryCondition = ['search-by-auditions', 'search-by-looks'].includes(formData1?.type)
 
   const onShowSizeChange = (page, limit) => {
     const payload = {
@@ -131,14 +131,15 @@ const CommonDataBaseList = ({isFav, loading }) => {
     return (
       <>
         <Collapse defaultActiveKey={["1"]}>
-        {formData1?.category && <div className="active-filters"> <div className='show-text-value'>{renderShowValue('category')}</div><CloseCircleOutlined onClick={() => {
+        {formData1?.category && <div className="active-filters"> <div className='show-text-value'>{renderShowValue('category')}</div>{categoryCondition ? null : <CloseCircleOutlined onClick={() => {
           setFormData({...formData, category: '', subCategory: ''})
-        }} className="close-icon" /></div> }
+        }} className="close-icon" />}</div> }
           <Panel header="Category" key="1">
           <SubCategoryComponent
             title="Category"
             name="category"
             options={categories}
+            subCategoriesOptions={selectedSubCategories}
             formData={formData1}
             setFormData={setFormData}
             setSubCategories={setSubCategories}

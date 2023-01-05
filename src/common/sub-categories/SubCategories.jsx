@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Typography, Checkbox, Input, Row, Col, Divider, InputNumber } from "antd";
 import FormSelect from "../inputs/FormSelect";
 import './subCategoriesStyle.less';
@@ -6,6 +6,8 @@ import GroupCheckbox from "../group-checkbox/GroupCheckbox";
 import { useStateQuery } from "../../api/getStatesQuery";
 import { mapCities, mapStates } from "../../common/utils";
 import { useLocation } from "react-router-dom";
+import qs from "query-string";
+import { FiltersContext } from "../../App";
 
 const SubCategoryComponent = ({
   options,
@@ -17,7 +19,7 @@ const SubCategoryComponent = ({
   onSelect,
   onClear,
   value,
-  setSubCategories,
+  setSubCategories
 }) => {
 
   const { data } = useStateQuery();
@@ -26,11 +28,15 @@ const SubCategoryComponent = ({
 	const [selectedState, setSelectedState] = useState(null);
 	const [cities, setCities] = useState([]);
   const locationPath = useLocation(); // React Hook
+  const { selectedSubCategories } = useContext(FiltersContext);
   const jobsLocation = locationPath.pathname.includes('jobs')
+  const paramQuery = qs.parse(locationPath?.search)
+  const categoryCondition = ['search-by-auditions', 'search-by-looks'].includes(paramQuery?.type)
+console.log(categoryCondition, 'categoryCondition')
   useEffect(() => {
 		const states = mapStates(data);
 		setLocation(states);
-	},[data])
+	},[data])  
 
 	useEffect(() => {
 		if(selectedState) {
@@ -39,7 +45,7 @@ const SubCategoryComponent = ({
 		}
 	},[selectedState])
 
-console.log(formData, 'formData formData')
+console.log(selectedSubCategories, 'selectedSubCategoriesselectedSubCategories')
 
   const locationFun = () => {
     return (
@@ -124,7 +130,6 @@ console.log(formData, 'formData formData')
           placeholder="Select category"
           value={formData?.category}
           onSelect={(cat, val) => {
-            // console.log(val, cat, 'val')
             if(jobsLocation){
               setFormData({
                     ...formData,
@@ -166,6 +171,7 @@ console.log(formData, 'formData formData')
           }
           // validationError={formDataErrors.states}
           width="100%"
+          disabled={categoryCondition}
         />
         <FormSelect
           className="state-search-input"
@@ -183,7 +189,7 @@ console.log(formData, 'formData formData')
               setCities([]);
               
             }}
-            options={formData?.category && subCategory}
+            options={paramQuery?.category && selectedSubCategories}
           showSearch
           required
           filterOption={(input, option) =>

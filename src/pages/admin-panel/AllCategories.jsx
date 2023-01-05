@@ -17,8 +17,8 @@ const renderMethod = (payload, title, id) => {
   if (title === 'Extra-Talent') return updateExtraTalentApi(id, payload);
 }
 
-const editRenderMethod = (payload, title, id) => {
-  if (title === 'category') return createCategoryApi(payload);
+const editRenderMethod = (payload, title, id, categoryId) => {
+  if (title === 'category') return updateCategoryApi(categoryId, payload);
   if (title === 'Sub-category') return updateSubCategoryByIdApi(id, payload);
   if (title === 'tags') return updateTagsByIdApi(id, payload);
   if (title === 'Best-In') return updateBestInByIdApi(id, payload);
@@ -61,9 +61,9 @@ const AllCategories = () => {
   }
 
 
-  const updateCategoryListApi = async(payload, title, selectedCategoryId) => {
+  const updateCategoryListApi = async(payload, title, selectedCategoryId, categoryId) => {
     console.log(payload, title, selectedCategoryId, 'payload, title, selectedCategoryId')
-    const res = await editRenderMethod(payload, title, selectedCategoryId);
+    const res = await editRenderMethod(payload, title, selectedCategoryId, categoryId);
     if(res){
       getCategories();
     fetchCategoriesList();
@@ -74,14 +74,21 @@ const AllCategories = () => {
   const handleSave = () => {
     let payload = {};
     if ( title === 'category' ) {
-      payload = {
-        key: formData['category'].toLowerCase().replace(' ', '-'),
-        value: formData['category']
-      }
+      if (isEditOptions) {
+        payload = {
+          value: formData['category']
+        }
+      } else {
+        payload = {
+          key: formData['category'].toLowerCase().replace(' ', '-'),
+          value: formData['category']
+        }
+      } 
+      
     }
     if ( title === 'Sub-category') {
       if (isEditOptions) {
-        payload = {_id:formData?._id ,key: formData['Sub-category'].toLowerCase().replace(' ', '-'), value: formData['Sub-category']}
+        payload = {_id:formData?._id ,key: formData?.key, value: formData['Sub-category']}
         // ?.map((item) => 
         // item.key === formData.key
         //   ? {...item, key: formData['Sub-category'].toLowerCase().replace(' ', '-'), value: formData[title]}
@@ -94,7 +101,7 @@ const AllCategories = () => {
 
     if ( title == 'tags') {
       if (isEditOptions) {
-        payload = {_id:formData?._id ,key: formData['tags'].toLowerCase().replace(' ', '-'), value: formData['tags']}
+        payload = {_id:formData?._id ,key: formData?.key, value: formData['tags']}
         // payload = selectedCategory?.tags.map((item) => 
         // item.key === formData.key
         //   ? {...item, key: formData['tags'].toLowerCase().replace(' ', '-'), value: formData[title]}
@@ -106,23 +113,13 @@ const AllCategories = () => {
     } 
 
     if (title === 'filters') {
-      if (isEditOptions) {
-        payload = selectedCategory?.filters.map((item) => 
-        item.key === formData.key
-          ? {...item, key: formData['filters'].toLowerCase().replace(' ', '-'), value: formData[title]}
-          : {...item}
-        )
-      } else {
-        const newPayload = formData['filters'].map((item) => {
-          return { key: item.toLowerCase().replace(' ', '-'), _id: new Date().valueOf(), value: item}
-        })
-        payload = newPayload
-      } 
+        payload = formData['filters']
+        // payload = newPayload
     } 
 
     if (title === 'Best-In') {
       if (isEditOptions) {
-        payload = {_id:formData?._id ,key: formData['Best-In'].toLowerCase().replace(' ', '-'), value: formData['Best-In']}
+        payload = {_id:formData?._id ,key: formData?.key, value: formData['Best-In']}
         // payload = selectedCategory?.bestIn.map((item) => 
         // item.key === formData.key
         //   ? {...item, key: formData['Best-In'].toLowerCase().replace(' ', '-'), value: formData[title]}
@@ -135,7 +132,7 @@ const AllCategories = () => {
 
     if (title === 'Extra-Talent') {
       if (isEditOptions) {
-        payload = {_id:formData?._id ,key: formData['Extra-Talent'].toLowerCase().replace(' ', '-'), value: formData['Extra-Talent']}
+        payload = {_id:formData?._id ,key: formData?.key, value: formData['Extra-Talent']}
         // payload = selectedCategory?.extraTalent.map((item) => 
         // item.key === formData.key
         //   ? {...item, key: formData['Extra-Talent'].toLowerCase().replace(' ', '-'), value: formData[title]}
@@ -147,7 +144,7 @@ const AllCategories = () => {
     }
     
     isEdit ? 
-    updateCategoryListApi(payload, title, selectedCategory?._id)
+    updateCategoryListApi(payload, title, selectedCategory?._id, formData?._id)
     : fetchRenderMethodData(payload, title, selectedCategory?._id)
     setIsVisible(false);
     setFormData({});
@@ -159,13 +156,12 @@ const AllCategories = () => {
 
   const handleEdit = (entity, type) => {
 
-    console.log(selectedCategory._id , entity, 'entity entity')
 
     if (type == 'category') {
       setFormData({...entity, 'category': entity.value})
       setTitle(type);
     // setIsVisible(true);
-      setIsEditOptions(false);
+      setIsEditOptions(true);
       setIsEdit(true);
     }
     if (type == 'Sub-category') {
@@ -556,7 +552,10 @@ export const AddCatContentModal = (props) => {
           label="Filters"
           mode="tags"
           value={formData[field]}
-          onChange={(e) => setFormData({...formData, [field]: e})}
+          onChange={(e) => {
+            const filteredKeywords = filtersList?.filter((word) => e?.includes(word?.value));
+            setFormData({...formData, [field]: filteredKeywords});
+          }}
           options={filtersList}
           showSearch
           required

@@ -62,7 +62,6 @@ const App = () => {
   const [category, setSelectedCategory] = useState([]);
   const [isloading, setIsloading] = useState(false);
 
-
   const fetchCategories = async (id) => {
     const data = await getCategoryApi();
     if(data) {

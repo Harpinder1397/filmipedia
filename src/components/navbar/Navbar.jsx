@@ -9,6 +9,7 @@ import {
   Space,
   Avatar,
   Switch,
+  Select,
 } from "antd";
 import { useHistory, useLocation } from "react-router-dom";
 import qs from "query-string";
@@ -93,6 +94,27 @@ const Navbar = ({setIsloading}) => {
     }
   }
 
+  const handleChange = (e) => {
+    if(['search-by-auditions', 'search-by-looks'].includes(e)){
+      const payload = {
+        ...formData,
+        type: e,
+        category: 'Cast'
+      }
+      setFormData(payload)
+      setSubCategories("639823ebcac41f6a64632c69");
+    }else {
+      const payload = {
+        ...formData,
+        type : e,
+        category: ''
+      }
+      setFormData(payload)
+      setSubCategories("");
+    }
+   
+  }
+
   const onChangeAvailable = async (e) => {
     setIsloading(true);
     const payloadCreate = {...userDetails?.rest, available: e ? 'Available' : 'Not Available' }
@@ -168,7 +190,7 @@ const Navbar = ({setIsloading}) => {
       key: "0",
       label: (
         <div> 
-          Avaliable : <Switch checked={userDetails?.rest?.available == 'Available' ? true : false} onChange={onChangeAvailable} />
+        Theme :  <Switch checked={themeType} onChange={handleThemeMode} checkedChildren="light" unCheckedChildren="dark" />
         </div>
       ),
     },
@@ -179,6 +201,24 @@ const Navbar = ({setIsloading}) => {
       key: "1",
       label: (
         <div onClick={() => history.push("/my-profile")}> My Info</div>
+      ),
+    },
+    {
+      type: "divider",
+    },
+    {
+      key: "8",
+      label: (
+        <div onClick={() => history.push("/timeline")}>Timeline</div>
+      ),
+    },
+    {
+      type: "divider",
+    },
+    {
+      key: "9",
+      label: (
+        <div onClick={() => history.push("/shortlisted")}>Shortlisted</div>
       ),
     },
     {
@@ -196,14 +236,23 @@ const Navbar = ({setIsloading}) => {
     {
       key: "3",
       label: (
-        <div onClick={() => history.push("/my/job/applications")}> My Applications</div>
+        <div onClick={() => history.push("/my/job/applications")}>  My Applied Jobs</div>
       ),
     },
     {
       type: "divider",
     },
     {
-      key: "4",
+      key: "6",
+      label: (
+        <div onClick={() => history.push("/job/applications")}> Received Applications</div>
+      ),
+    },
+    {
+      type: "divider",
+    },
+    {
+      key: "5",
       label: <div onClick={() => handelLogout()}>Sign Out</div>,
     },
   ]
@@ -213,7 +262,7 @@ const Navbar = ({setIsloading}) => {
       key: "0",
       label: (
         <div> 
-          Avaliable : <Switch checked={userDetails?.rest?.available == 'Available' ? true : false} onChange={onChangeAvailable} />
+        Theme :  <Switch checked={themeType} onChange={handleThemeMode} checkedChildren="light" unCheckedChildren="dark" />
         </div>
       ),
     },
@@ -224,6 +273,24 @@ const Navbar = ({setIsloading}) => {
       key: "1",
       label: (
         <div onClick={() => history.push("/my-profile")}> My Info</div>
+      ),
+    },
+    {
+      type: "divider",
+    },
+    {
+      key: "8",
+      label: (
+        <div onClick={() => history.push("/timeline")}>Timeline</div>
+      ),
+    },
+    {
+      type: "divider",
+    },
+    {
+      key: "9",
+      label: (
+        <div onClick={() => history.push("/shortlisted")}>Shortlisted</div>
       ),
     },
     {
@@ -241,7 +308,16 @@ const Navbar = ({setIsloading}) => {
     {
       key: "3",
       label: (
-        <div onClick={() => history.push("/my/job/applications")}> My Applications</div>
+        <div onClick={() => history.push("/my/job/applications")}>  My Applied Jobs</div>
+      ),
+    },
+    {
+      type: "divider",
+    },
+    {
+      key: "6",
+      label: (
+        <div onClick={() => history.push("/job/applications")}> Received Applications</div>
       ),
     },
     {
@@ -270,28 +346,28 @@ const Navbar = ({setIsloading}) => {
     if (token) {
       return (
         <React.Fragment>
-          <Button type="primary" className={location.pathname ==  '/timeline' ? "active-navbar-btn" : '' } onClick={() => history.push("/timeline")}>
-            Timeline
+          <Button className={location.pathname ==  '/database' ? "active-navbar-btn" : '' } type="primary" onClick={() => history.push("/database")}>
+            Cast & Crew
+          </Button>
+          <Button type="primary" className={location.pathname ==  '/rentals' ? "active-navbar-btn" : '' } onClick={() => history.push("/rentals")}>
+          Rentals
           </Button>
           <Button type="primary" className={location.pathname ==  '/jobs' ? "active-navbar-btn" : '' } onClick={() => history.push("/jobs")}>
             Jobs
           </Button>
-          <Button
+          {/*<Button
             type="primary"
             className={location.pathname ==  '/job/applications' ? "active-navbar-btn" : '' }
             onClick={() => history.push("/job/applications")}
           >
             Applications
-          </Button>
-          <Button className={location.pathname ==  '/database' ? "active-navbar-btn" : '' } type="primary" onClick={() => history.push("/database")}>
-            Database
-          </Button>
+      </Button>*/}
           {/* <Button type="primary" onClick={()=>history.push('/messages')}>Messages</Button> */}
           {/* <Button type="primary" onClick={()=>history.push('/my-profile')}>My Info</Button> */}
-          <Button className={location.pathname ==  '/shortlisted' ? "active-navbar-btn" : '' } type="primary" onClick={() => history.push("/shortlisted")}>
+          {/*<Button className={location.pathname ==  '/shortlisted' ? "active-navbar-btn" : '' } type="primary" onClick={() => history.push("/shortlisted")}>
             Shortlisted
-          </Button>
-          <Switch checked={themeType} onChange={handleThemeMode} checkedChildren="light" unCheckedChildren="dark" />
+    </Button>*/}
+          <Switch checked={userDetails?.rest?.available == 'Available' ? true : false} onChange={onChangeAvailable} checkedChildren="offline" unCheckedChildren="online" />
           {/* <Button type="primary" onClick={()=>history.push('/admin')}>Admin</Button> */}
           {/*<Button type="primary" onClick={handelLogout} ghost>Sign Out</Button> */}
         </React.Fragment>
@@ -345,12 +421,11 @@ const Navbar = ({setIsloading}) => {
               placeholder="Please select"
               className="navbar__category-selector"
               onSelect={(id, val) => {
-                console.log(val.id, 'val')
                 const getSubCategories = categories.find(
                   (item) => item._id == val.id
                 );
                 setSubCategoriesList(val.id);
-                // setSubCategories(val.id);
+                // setSubCategories(val.id "" '"639823ebcac41f6a64632c69"');
                 // HandlenewChnage()
                 if(jobsLocation){
                   setJobFormData({
@@ -500,7 +575,47 @@ const Navbar = ({setIsloading}) => {
             />
           </div>
         </div>
-
+      <div className="navbar-select-input">
+      <Select
+      value={formData?.type}
+      placeholder="Please select"
+      onChange={handleChange}
+      allowClear={true}
+      onClear={() => {
+          if(['search-by-auditions', 'search-by-looks'].includes(formData?.type)){
+            const payload = {
+              ...formData,
+              type: '',
+              category: ''
+            }
+          setFormData({ ...payload, type: '' })      
+          }else {
+            const payload = {
+              ...formData,
+              type: ''
+            }
+          setFormData({ ...payload, type: '' })      
+          }
+      }}
+      options={[
+        {
+          value: 'search-by-auditions',
+          label: 'Search by auditions',
+        },
+        {
+          value: 'search-by-looks',
+          label: 'Search by looks',
+        },
+        {
+          value: 'search-by-show-reel',
+          label: 'Search by show reel',
+        },
+        {
+          value: 'search-by-profile',
+          label: 'Search by profile',
+        },
+      ]}
+    />
         <Input
           name="fullName"
           className="navbar-search-input"
@@ -514,6 +629,7 @@ const Navbar = ({setIsloading}) => {
             }
           }}
         />
+        </div>
         <div className="navbar__right">{renderButtons()}</div>
         {renderProfileIcon()}
         <MobileNavbar
