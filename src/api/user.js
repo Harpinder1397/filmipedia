@@ -138,9 +138,45 @@ export const currentDpThumbnailApi = (userId, payload) => {
     });
 };
 
+export const createAuditionApi = (userId, payload) => {
+  return apiPost(`${API_URL}/user/${userId}/audition`, payload)
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
 
-// new 
+export const deleteAuditionByIdApi = (userId, payload) => {
+  return apiPost(`${API_URL}/user/${userId}/audition/delete`, payload)
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
 
+export const createShowreelApi = (userId, payload) => {
+  return apiPost(`${API_URL}/user/${userId}/showreel`, payload)
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
+export const deleteShowreelByIdApi = (userId, payload) => {
+  return apiPost(`${API_URL}/user/${userId}/showreel/delete`, payload)
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
 
 export const useGetUserDataQuery = () => {
   return useQuery(["userInfo"], [`${API_URL}/user`], () =>

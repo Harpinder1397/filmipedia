@@ -14,6 +14,7 @@ import "./basicInfoStyle.less";
 import { useStateQuery } from "../../../api/getStatesQuery";
 import { useGetCountriesQuery, useGetCountriesMutation } from "../../../api/getCountries";
 import { useGetStateMutation, useGetStateQuery } from "../../../api/getState";
+import { useHistory } from "react-router-dom";
 
 const BasicInfo = ({
   userDetails,
@@ -22,22 +23,24 @@ const BasicInfo = ({
   setUserDetails,
   updateBasicDetails,
   setCustomValueAdd,
-  customValueAdd
+  customValueAdd,
+  getUserDetails
 }) => {
+  const history = useHistory();
   const [location, setLocation] = useState(undefined);
   const [selectedState, setSelectedState] = useState(null);
   const [collapsed, setCollapsed] = useState(false);
   const [cities, setCities] = useState([]);
-  const { tags, bestIn, extraTalent, categories, setSubCategories,setCategoryId, selectedSubCategories } =
+  const { tags, bestIn, extraTalent, categoryId, categories, setSubCategories,setCategoryId, selectedSubCategories, fetchCategories } =
     useContext(FiltersContext);
   const { data } = useStateQuery();
-
+  const myProfile = history.location.pathname.includes('basic-details');
   const {data: countriesList } = useGetCountriesQuery();
   const {data: statesList } = useGetStateQuery();
   const {mutate: getCountriesMutation } = useGetCountriesMutation();
   const {mutate: getStateMutation } = useGetStateMutation();
   
-
+console.log(userDetails?.rest?.categoryId, 'userDetails')
 const handleThemeMode = (e) => {
   const data = {
     ...userDetails,
@@ -75,6 +78,12 @@ const handleThemeMode = (e) => {
   //   {...data, 'value': data.state }
   // ));
 // const db = {}
+
+useEffect(() => {
+  getUserDetails();
+}, [])
+
+
   return (
     <>
     <Divider orientation="left" className="divider-color-font">Category Info</Divider>
@@ -94,6 +103,7 @@ const handleThemeMode = (e) => {
         setUserDetails(data);
       }}
       options={categories}
+      disabled={myProfile}
       required
       showSearch
       filterOption={(input, option) =>

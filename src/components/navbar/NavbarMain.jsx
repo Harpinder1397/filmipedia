@@ -94,7 +94,7 @@ const NavbarMain = () => {
           onClick={()=>history.push('/messages')}>Messages</button> */}
             <button 
               className="navbar-right-btn" 
-              onClick={()=>history.push('/my-profile')}>My Info</button>
+              onClick={()=>history.push('/my-profile/basic-details')}>My Info</button>
             <button 
               className="navbar-right-btn" 
               onClick={()=>history.push('/shortlisted')}>Shortlisted</button>

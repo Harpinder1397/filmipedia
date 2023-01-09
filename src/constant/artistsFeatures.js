@@ -28,6 +28,19 @@ export const hairColors = [
   }
 ]
 
+export const typeFileOptions = [
+  {
+    id: 1,
+    _id: 'link',
+    value: 'Link' 
+  },
+  {
+    id: 2,
+    _id: 'upload-file',
+    value: 'Upload File' 
+   },
+]
+
 export const eyeColors = [
   {
     id: 1,

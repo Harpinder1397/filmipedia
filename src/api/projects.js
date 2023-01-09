@@ -49,6 +49,7 @@ export const deleteProjectApi = (id) => {
     });
 };
 
+
 // useQuery get all projects list  ( get method )
 // export const useStatesQuery = () => {
 //   return useQuery(["projects"],[`${API_URL}/projects`],() =>

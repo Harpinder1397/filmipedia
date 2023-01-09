@@ -169,7 +169,7 @@ const App = () => {
     // getStates();
     setToken(token);
     fetchStatesMutation();
-fetchCategories()  
+    fetchCategories()  
     // setSubCategories()
   }, []);
 
@@ -234,7 +234,8 @@ fetchCategories()
               <Route exact path="/" component={Demo} />
               <Route exact path="/signin" component={RegistrationForms} />
               <Route exact path="/signin/:callbackUrl" component={RegistrationForms} />
-              <LoginRoute exact path="/my-profile" component={MyProfile} />
+              <LoginRoute exact path="/my-profile/" component={MyProfile} />
+              <LoginRoute exact path="/my-profile/:name" component={MyProfile} />
               <LoginRoute exact path="/user/profile/:Id" component={MyProfile} />
               <LoginRoute exact path="/user/create/profile" component={MyProfile} />
               

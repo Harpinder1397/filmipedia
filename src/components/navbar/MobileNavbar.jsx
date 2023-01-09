@@ -29,7 +29,7 @@ const userMenu = [
   getItem('Jobs', '/jobs'),
   getItem('Applications', '/job/applications'),
   getItem('Database', '/database'),
-  getItem('My Info', '/my-profile'),
+  getItem('My Info', '/my-profile/basic-details'),
   getItem('Shortlisted', '/shortlisted'),
   getItem('Sign Out', '/signOut')
 ];
@@ -39,7 +39,7 @@ const AdminMenu = [
   getItem('Jobs', '/jobs'),
   getItem('Applications', '/job/applications'),
   getItem('Database', '/database'),
-  getItem('My Info', '/my-profile'),
+  getItem('My Info', '/my-profile/basic-details'),
   getItem('Shortlisted', '/shortlisted'),
   getItem('Admin', '/admin'),
   getItem('Sign Out', '/signOut')

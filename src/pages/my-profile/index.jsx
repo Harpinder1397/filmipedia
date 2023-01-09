@@ -22,19 +22,23 @@ import {
   updateExtraTalentApi,
   updateTagsApi,
 } from "../../api/getCategories";
+import MyAudition from "./myAudition/myAudition";
+import MyShowreel from "./myShowreel/myShowreel";
 
 const MyProfile = () => {
   const myUserId = localStorage.getItem("user");
   const history = useHistory();
   const [userDetails, setUserDetails] = useState({});
+  const [imageFormData, setImageFormData] = useState([]);
   const getActiveTab = localStorage.getItem("activeTab");
-  const [activeTab, setActiveTab] = useState(getActiveTab || 1);
+  const [activeTab, setActiveTab] = useState(history.location.pathname);
   const [location, setLocation] = useState(undefined);
   const [isloading, setIsloading] = useState(false);
   const [customValueAdd, setCustomValueAdd] = useState({});
   const [selectedState, setSelectedState] = useState(null);
   const [cities, setCities] = useState([]);
   const [files, setFiles] = useState({});
+  // console.log(activeTab, 'activeTabactiveTab')
   const {
     states,
     categoryId,
@@ -57,13 +61,14 @@ console.log(userDetails, 'userDetails')
   const getUserDetails = async () => {
     setIsloading(true);
     const data = await getUserApi(userId).then((data) => {
+      console.log(data, 'data')
       setIsloading(false);
       setCategoryId(data?.categoryId);
       setSubCategories(data?.categoryId);
       return data;
     });
-    const { thumbnails, projects, ...rest } = data;
-    setUserDetails({ thumbnails, projects, rest });
+    const { thumbnails, projects, audition, showreel, ...rest } = data;
+    setUserDetails({ thumbnails, projects, rest, audition, showreel });
   };
 
   useEffect(() => {
@@ -216,26 +221,51 @@ console.log(userDetails, 'userDetails')
   };
 
   const uploadThumbnail = async () => {
+    if(!imageFormData?.tags?.length){
+      alert('select tags')
+      return
+    }
     setIsloading(true);
     var fd = new FormData();
     fd.append("imgUploader", files);
     const loginResponse = await uploadApi(userId, fd);
     if (!userDetails.thumbnails.length) {
-      const thumbnails = { url: loginResponse, dp: true, createdAt: new Date() }
+      const thumbnails = { url: loginResponse, dp: true, createdAt: new Date(), tags: imageFormData?.tags, _id: new Date().valueOf() }
       updateThumbnailsApi(userId, thumbnails).then(() => {
         setIsloading(false);
-        getUserDetails()
+        getUserDetails();
+        setImageFormData([]);
       });
       // setUserDetails({ ...userDetails, thumbnails });
       setFiles({});
       return;
     }
-    const thumbnails = { url: loginResponse, dp: false, createdAt: new Date() }
+    const thumbnails = { url: loginResponse, dp: false, createdAt: new Date(), tags: imageFormData?.tags, _id: new Date().valueOf() }
     updateThumbnailsApi(userId, thumbnails).then(() => {
       setIsloading(false);
       getUserDetails()
+      setImageFormData([]);
     });
+
+    if (imageFormData?.customTags?.length) {
+      const convertArray = imageFormData?.customTags?.map((value, index) => ({
+        key: value.toLowerCase().replace(" ", "-"),
+        _id: new Date().valueOf() + index,
+        value: value,
+      }));
+      const payload = [...tags, ...convertArray];
+      const res = updateTagsApi(categoryId, payload);
+      if(res){
+        setIsloading(true);
+        setTimeout(() => {
+          fetchCategories(categoryId)
+          setIsloading(false);
+          }, 1000);
+      }
+    }
+
     setFiles({});
+    setImageFormData([]);
     // setUserDetails({ ...userDetails, thumbnails });
   };
 
@@ -281,10 +311,14 @@ console.log(userDetails, 'userDetails')
   };
 
   useEffect(() => {
-    localStorage.setItem("activeTab", activeTab);
-  }, [activeTab]);
+    // console.log(activeTab, 'activeTab')
+    history.push(`${history.location.pathname}`)
+    // setActiveTab(history.location.pathname)
+    // localStorage.setItem("activeTab", activeTab);
+  }, [history.location.pathname]);
 
   const taboOnChange = (e) => {
+    history.push(`${e}`)
     setActiveTab(e);
   };
 
@@ -294,7 +328,7 @@ console.log(userDetails, 'userDetails')
         <Row>
           <Col span={24}>
             <Tabs defaultActiveKey={activeTab} onChange={taboOnChange}>
-              <Tabs.TabPane tab="Basic Details" key="1">
+              <Tabs.TabPane tab="Basic Details" key="/my-profile/basic-details">
                 <BasicInfo
                   userDetails={userDetails}
                   onChangeRestOptions={onChangeRestOptions}
@@ -303,14 +337,15 @@ console.log(userDetails, 'userDetails')
                   updateBasicDetails={updateBasicDetails}
                   customValueAdd={customValueAdd}
                   setCustomValueAdd={setCustomValueAdd}
+                  getUserDetails={getUserDetails}
                 />
               </Tabs.TabPane>
               {!createUserCheck && (
                 <>
-                  <Tabs.TabPane tab="Project Details" key="2">
+                  <Tabs.TabPane tab="Project Details" key="/my-profile/project-details">
                     <Projects />
                   </Tabs.TabPane>
-                  <Tabs.TabPane tab="my gallery" key="3">
+                  <Tabs.TabPane tab="My Gallery" key="/my-profile/my-gallery">
                     <MyImages
                       userDetails={userDetails}
                       makeDp={makeDp}
@@ -318,8 +353,33 @@ console.log(userDetails, 'userDetails')
                       handleUploadChange={handleUploadChange}
                       uploadThumbnail={uploadThumbnail}
                       files={files}
+                      tags={tags}
+                      imageFormData={imageFormData}
+                      setImageFormData={setImageFormData}
                     />
                   </Tabs.TabPane>
+                  <Tabs.TabPane tab="My Audition" key="/my-profile/my-audition">
+                  <MyAudition
+                    userDetails={userDetails}
+                    makeDp={makeDp}
+                    removePic={removePic}
+                    handleUploadChange={handleUploadChange}
+                    uploadThumbnail={uploadThumbnail}
+                    files={files}
+                    getUserDetails={getUserDetails}
+                  />
+                </Tabs.TabPane>
+                <Tabs.TabPane tab="My Showreel" key="/my-profile/my-showreel">
+                <MyShowreel
+                  userDetails={userDetails}
+                  makeDp={makeDp}
+                  removePic={removePic}
+                  handleUploadChange={handleUploadChange}
+                  uploadThumbnail={uploadThumbnail}
+                  files={files}
+                  getUserDetails={getUserDetails}
+                />
+              </Tabs.TabPane>
                 </>
               )}
             </Tabs>

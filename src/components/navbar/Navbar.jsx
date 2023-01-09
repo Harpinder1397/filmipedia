@@ -200,7 +200,7 @@ const Navbar = ({setIsloading}) => {
     {
       key: "1",
       label: (
-        <div onClick={() => history.push("/my-profile")}> My Info</div>
+        <div onClick={() => history.push("/my-profile/basic-details")}> My Info</div>
       ),
     },
     {
@@ -272,7 +272,7 @@ const Navbar = ({setIsloading}) => {
     {
       key: "1",
       label: (
-        <div onClick={() => history.push("/my-profile")}> My Info</div>
+        <div onClick={() => history.push("/my-profile/basic-details")}> My Info</div>
       ),
     },
     {
