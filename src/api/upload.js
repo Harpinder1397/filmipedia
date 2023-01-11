@@ -25,3 +25,25 @@ export const deleteImgApi = (imgUrl) => {
       return error;
     });
 };
+
+export const uploadVideoApi = (userId, file) => {
+  const url = `${API_URL}/upload/video/${userId}`;
+  return apiPost(url, file)
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
+export const deleteVideoApi = (imgUrl) => {
+  const url = `${API_URL}/upload/video/delete?url=${imgUrl.url}`;
+  return apiDelete(url)
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => {
+      return error;
+    });
+};

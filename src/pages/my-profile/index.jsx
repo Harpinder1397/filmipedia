@@ -56,7 +56,6 @@ const MyProfile = () => {
   const userId = Id || myUserId;
   const createUserCheck = window.location.pathname == "/user/create/profile";
 
-console.log(userDetails, 'userDetails')
 
   const getUserDetails = async () => {
     setIsloading(true);
@@ -229,7 +228,7 @@ console.log(userDetails, 'userDetails')
     var fd = new FormData();
     fd.append("imgUploader", files);
     const loginResponse = await uploadApi(userId, fd);
-    if (!userDetails.thumbnails.length) {
+    if (!userDetails?.thumbnails?.length) {
       const thumbnails = { url: loginResponse, dp: true, createdAt: new Date(), tags: imageFormData?.tags, _id: new Date().valueOf() }
       updateThumbnailsApi(userId, thumbnails).then(() => {
         setIsloading(false);
@@ -358,7 +357,7 @@ console.log(userDetails, 'userDetails')
                       setImageFormData={setImageFormData}
                     />
                   </Tabs.TabPane>
-                  <Tabs.TabPane tab="My Audition" key="/my-profile/my-audition">
+                  {userDetails?.rest?.category == "Cast" && <Tabs.TabPane tab="My Audition" key="/my-profile/my-audition">
                   <MyAudition
                     userDetails={userDetails}
                     makeDp={makeDp}
@@ -367,8 +366,11 @@ console.log(userDetails, 'userDetails')
                     uploadThumbnail={uploadThumbnail}
                     files={files}
                     getUserDetails={getUserDetails}
+                    tags={tags}
+                    fetchCategories={fetchCategories}
+                    categoryId={categoryId}
                   />
-                </Tabs.TabPane>
+                </Tabs.TabPane>}
                 <Tabs.TabPane tab="My Showreel" key="/my-profile/my-showreel">
                 <MyShowreel
                   userDetails={userDetails}
@@ -378,6 +380,9 @@ console.log(userDetails, 'userDetails')
                   uploadThumbnail={uploadThumbnail}
                   files={files}
                   getUserDetails={getUserDetails}
+                  tags={tags}
+                  fetchCategories={fetchCategories}
+                  categoryId={categoryId}
                 />
               </Tabs.TabPane>
                 </>

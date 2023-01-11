@@ -168,6 +168,16 @@ export const createShowreelApi = (userId, payload) => {
     });
 };
 
+export const replaceShowreelApi = (userId, payload) => {
+  return apiPost(`${API_URL}/user/${userId}/showreel/replace`, payload)
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
 export const deleteShowreelByIdApi = (userId, payload) => {
   return apiPost(`${API_URL}/user/${userId}/showreel/delete`, payload)
     .then((res) => {
