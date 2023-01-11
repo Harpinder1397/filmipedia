@@ -6,10 +6,9 @@ import VideoUploader from "../../../common/video-uploader";
 import FormInput from "../../../common/inputs/FormInput";
 
 const MyAuditionModal = (props) => {
-  const {isLoading, tags, formData, setFormData, isVisibleModal, modalTitle, handleAdd, handleCancel, userDetails,handleFileUpload  } = props;
+  const {tags, formData, setFormData, isVisibleModal, modalTitle, handleAdd, handleCancel, userDetails,handleFileUpload  } = props;
 
   return (
-    <Spin spinning={isLoading}>
     <Modal
       visible={isVisibleModal}
       onOk={handleAdd}
@@ -86,7 +85,6 @@ const MyAuditionModal = (props) => {
         </Col>
       </Row>
     </Modal>
-    </Spin>
   )
 }
 
