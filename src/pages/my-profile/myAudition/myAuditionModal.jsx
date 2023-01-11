@@ -1,14 +1,15 @@
 import React from "react";
-import { Row, Col, Modal } from 'antd';
+import { Row, Col, Modal, Spin } from 'antd';
 import FormSelect from '../../../common/inputs/FormSelect';
 import { typeFileOptions } from "../../../constant/artistsFeatures";
 import VideoUploader from "../../../common/video-uploader";
 import FormInput from "../../../common/inputs/FormInput";
 
 const MyAuditionModal = (props) => {
-  const {tags, formData, setFormData, isVisibleModal, modalTitle, handleAdd, handleCancel, userDetails,handleFileUpload  } = props;
+  const {isLoading, tags, formData, setFormData, isVisibleModal, modalTitle, handleAdd, handleCancel, userDetails,handleFileUpload  } = props;
 
   return (
+    <Spin spinning={isLoading}>
     <Modal
       visible={isVisibleModal}
       onOk={handleAdd}
@@ -85,6 +86,7 @@ const MyAuditionModal = (props) => {
         </Col>
       </Row>
     </Modal>
+    </Spin>
   )
 }
 

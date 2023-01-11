@@ -1,4 +1,4 @@
-import { Row, Col, Button, Card } from 'antd';
+import { Row, Col, Button, Card, Spin } from 'antd';
 import { createAuditionApi, deleteAuditionByIdApi } from '../../../api/user';
 import { useState } from 'react';
 import EmptyMessage from '../../../common/emptyMessage/EmptyMessage';
@@ -58,40 +58,47 @@ const MyAudition = ({
   }
 
   const handleAdd = async () => {
+    setIsLoading(true);
     let payload;
     if(formData?.type && (formData?.link || formData.files)){
       if(formData?.type == "Upload File"){
         var fd = new FormData();
         fd.append("videoUploader", formData?.files);
         const generateVideoLink = await uploadVideoApi(userId, fd);
-        if(generateVideoLink){
+        if(generateVideoLink && !generateVideoLink?.message){
+        setIsLoading(false);
           payload = {...formData, link: generateVideoLink, customTags: '', files: '' }
-          // setIsloading(false);
+          setIsLoading(false);
+        }else {
+          alert(generateVideoLink?.message)
+          setIsLoading(false);
         }
       }else {
         payload = {...formData, _id: new Date().valueOf(), customTags: '', files: '' }
+        setIsLoading(false);
       }
       createAuditionfun(payload)
       if (formData?.customTags?.length) {
         const convertArray = formData?.customTags?.map((value, index) => ({
-          key: value.toLowerCase().replace(" ", "-"),
+          key: value.toLowerCase()?.replace(" ", "-"),
           _id: new Date().valueOf() + index,
           value: value,
         }));
         const payload = [...tags, ...convertArray];
         const res = updateTagsApi(categoryId, payload);
         if(res){
-          // setIsloading(true);
+          setIsLoading(true);
           setTimeout(() => {
             fetchCategories(categoryId)
-            // setIsloading(false);
+            setIsLoading(false);
             }, 1000);
         }
       }
     } else {
       alert("please fill mandatory fields")
+      setIsLoading(false);
     }
-    
+    setIsLoading(false)
   };
 
 
@@ -119,6 +126,7 @@ const MyAudition = ({
 
   return (
     <>
+    <Spin spinning={isLoading}>
      <Row justify="center">
         <div className="content">
           {
@@ -183,6 +191,7 @@ const MyAudition = ({
         }): <EmptyMessage />}
       </Row>
       <MyAuditionModal
+       isLoading={isLoading}
        userDetails={userDetails}
        tags={tags}
         formData={formData}
@@ -199,6 +208,7 @@ const MyAudition = ({
       handleFileUpload={handleFileUpload}
       // onChangeProjectFun={onChangeProjectFun}
       />
+      </Spin>
     </>
   )
 }
