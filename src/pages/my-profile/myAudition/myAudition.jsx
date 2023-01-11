@@ -33,7 +33,6 @@ const MyAudition = ({
       return 
     }
     setFormData({...formData, files: e.target.files[0]})
-   
   }
 
   const createAuditionfun = async (payload) => {
@@ -61,6 +60,7 @@ const MyAudition = ({
     setIsLoading(true);
     let payload;
     if(formData?.type && (formData?.link || formData.files)){
+      setIsVisibleModal(false);
       if(formData?.type == "Upload File"){
         var fd = new FormData();
         fd.append("videoUploader", formData?.files);
@@ -88,6 +88,8 @@ const MyAudition = ({
         const res = updateTagsApi(categoryId, payload);
         if(res){
           setIsLoading(true);
+          setIsVisibleModal(false);
+          
           setTimeout(() => {
             fetchCategories(categoryId)
             setIsLoading(false);
