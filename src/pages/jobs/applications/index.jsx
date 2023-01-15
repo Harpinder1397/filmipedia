@@ -1,7 +1,7 @@
 import TableComponent from "../../../common/TableComponent";
 import React, { useEffect } from "react";
 import { Spin, Typography } from "antd";
-import { useJobApplicationsQuery, useUpdateJobApplicationsMutation } from "api/getJobApplications";
+import { useJobApplicationsQuery, useUpdateJobApplicationsMutation } from "../../../api/getJobApplications";
 
 const { Title } = Typography;
 
